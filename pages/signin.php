@@ -1,0 +1,40 @@
+<?php
+	if(isLogged() == 1){
+		header("Location:index.php?page=membres");
+	}
+
+?>
+
+<h2 class="header">Se connecter</h2>
+
+<?php
+
+	if(isset($_POST['submit'])){
+		$email = htmlspecialchars(trim($_POST['email']));
+		$password = sha1(htmlspecialchars(trim($_POST['password'])));
+		
+		if(user_exist($email,$password) == 1){
+			$_SESSION['tchat'] = $email;
+			header("http://nas.stilmant.be:25000/index.php?page=membres");
+		}else{
+			$error_user_not_found = "L'adresse email ou le mot de passe est incorrect.";
+		}
+	}
+
+?>
+
+<form method="post" id="logForm">
+
+	<div class="field">
+    <label for="email" class="field-label">Votre email</label>
+    <input type="email" id="email" name="email" class="field-input">
+	</div>
+	
+	<div class="field">
+    <label for="password" class="field-label">Votre mot de passe</label>
+    <input type="password" id="password" name="password" class="field-input">
+	</div>
+	<p class="error"><?php echo (isset($error_user_not_found)) ? $error_user_not_found : ''; ?></p>
+	<button type="submit" name="submit">Se connecter</button>
+
+</form>
